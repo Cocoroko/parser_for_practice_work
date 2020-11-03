@@ -103,6 +103,6 @@ int getLongestPrefixLength(string rpn, string word) {
 int main() {
 	string rpn, word;
 	cin >> rpn >> word;
-	cout << get_longest_prefix_length(rpn, word) << endl;
+	cout << getLongestPrefixLength(rpn, word) << endl;
 	return 0;
 }
