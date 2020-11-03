@@ -2,7 +2,7 @@
 #include <cassert>
 using namespace std;
 
-int get_longest_prefix_length(string rpn, string word);
+int getLongestPrefixLength(string rpn, string word);
 
 void test(string rpn, string word, int answer_right = -1) {
 	int answer = get_longest_prefix_length(rpn, word);
