@@ -6,7 +6,7 @@
 #include <iostream>
 using namespace std;
 
-int get_operand(vector<int> &stack) {
+int getOperand(vector<int> &stack) {
 	if (stack.empty()) {
 		throw std::out_of_range("stack is empty!");
 	}
@@ -15,16 +15,14 @@ int get_operand(vector<int> &stack) {
 	return operand;
 }
 
-// Даны \alpha и слово word \in {a, b, c}*
-// Найти длину самого длинного префикса word, принадлежащего L
-int get_longest_prefix_length(string rpn, string word) {
+
+int getLongestPrefixLength(string rpn, string word) {
 	if (rpn.empty()) {
 		throw logic_error("regular expression is empty!");
 	}
 	rpn.erase(remove_if(rpn.begin(), rpn.end(), ::isspace), rpn.end());
 	int rpn_length = rpn.length();
 	int word_length = word.length();
-	// dp[k][i][j] = можно ли получить подслово word[i,,j) из регулярного выражения, соответствующего символу rpn[k]
 	vector<vector<vector<int >>> dp(rpn_length, vector<vector<int >>(word_length + 1, vector<int>(word_length + 1, false)));
 
 	vector<int> stack;
@@ -32,8 +30,8 @@ int get_longest_prefix_length(string rpn, string word) {
 		for (int k = 0; k < rpn_length; ++k) {
 			switch (rpn[k]) {
 				case '+': {
-					int operand2 = get_operand(stack);
-					int operand1 = get_operand(stack);
+					int operand2 = getOperand(stack);
+					int operand1 = getOperand(stack);
 					for (int i = 0; i <= word_length; ++i) {
 						for (int j = i; j <= word_length; ++j) {
 							dp[k][i][j] = dp[operand1][i][j] || dp[operand2][i][j];
@@ -42,8 +40,8 @@ int get_longest_prefix_length(string rpn, string word) {
 					break;
 				}
 				case '.': {
-					int operand2 = get_operand(stack);
-					int operand1 = get_operand(stack);
+					int operand2 = getOperand(stack);
+					int operand1 = getOperand(stack);
 					for (int i = 0; i <= word_length; ++i) {
 						for (int j = i; j <= word_length; ++j) {
 							for (int delimeter = i; delimeter <= j; ++delimeter) {
@@ -54,7 +52,7 @@ int get_longest_prefix_length(string rpn, string word) {
 					break;
 				}
 				case '*': {
-					int operand = get_operand(stack);
+					int operand = getOperand(stack);
 					for (int i = 0; i <= word_length; ++i) {
 						dp[k][i][i] = true;
 					}
@@ -72,7 +70,7 @@ int get_longest_prefix_length(string rpn, string word) {
 						dp[k][i][i] = true;
 					}
 					break;
-				default: // single letter
+				default: 
 					if (!('a' <= rpn[k] && rpn[k] <= 'c')) {
 						char buffer[rpn_length + 100];
 						int size = snprintf(buffer, sizeof(buffer), "string '%s' contains invalid symbol '%c' (code %d) at position %d", rpn.c_str(), rpn[k], (int) rpn[k], k);
@@ -88,15 +86,15 @@ int get_longest_prefix_length(string rpn, string word) {
 			stack.push_back(k);
 		}
 	} catch (out_of_range e) {
-		throw logic_error("string '" + rpn + "' is not a valid regular expression: there are LESS operands than required");
+		throw logic_error("string '" + rpn + "' ERROR");
 	}
 	assert(!stack.empty());
 	if (stack.size() > 1) {
-		throw logic_error("string '" + rpn + "' is not a valid regular expression: there are MORE operands than required");
+		throw logic_error("string '" + rpn + "' ERROR");
 	}
-	for (int maximum_prefix_length = word_length; maximum_prefix_length >= 0; --maximum_prefix_length) {
-		if (dp[rpn_length - 1][0][maximum_prefix_length]) {
-			return maximum_prefix_length;
+	for (int maximumPrefixLength = word_length; maximumPrefixLength >= 0; --maximumPrefixLength) {
+		if (dp[rpn_length - 1][0][maximumPrefixLength]) {
+			return maximumPrefixLength;
 		}
 	}
 	return 0;
