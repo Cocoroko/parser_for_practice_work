@@ -2,10 +2,10 @@
 #include <cassert>
 using namespace std;
 
-int getLongestPrefixLength(string rpn, string word);
+int GetTheLongestPrefix(string rpn, string word);
 
 void test(string rpn, string word, int answer_right = -1) {
-  int answer = getLongestPrefixLength(rpn, word);
+  int answer = GetTheLongestPrefix(rpn, word);
   if (answer != answer_right) {
     dbg(rpn, word, answer, answer_right);
   }
